@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>健康安全顾问</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css ">
+    <!-- 使用本地Font Awesome资源 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* 全局样式 */
         * {
@@ -16,7 +17,7 @@
         
         body {
             background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-            background-image: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80 ');
+            background-image: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -25,7 +26,7 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
-            overflow-x: visible; /* 允许横向滚动 */
+            overflow-x: visible;
         }
         
         /* 警示语和标语容器 */
@@ -50,7 +51,7 @@
             padding: 10px 15px;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            font-size: calc(0.8rem + 0.1vw); /* 自适应字体大小 */
+            font-size: calc(0.8rem + 0.1vw);
             color: #333;
             margin: 8px 0;
             text-align: center;
@@ -80,7 +81,7 @@
             max-height: 700px;
             z-index: 1;
             position: relative;
-            margin-top: 40px; /* 为警示语和标语留出空间 */
+            margin-top: 40px;
         }
         
         /* 标题栏 */
@@ -218,7 +219,7 @@
         /* 响应式设计 */
         @media (max-width: 768px) {
             .sidebar {
-                display: none; /* 在小屏幕上隐藏警示语和标语 */
+                display: none;
             }
             
             .chat-container {
@@ -345,10 +346,42 @@
             // 显示用户消息
             addMessage(userInput, 'user-message');
             
-            // 模拟API调用并显示回复
-            setTimeout(() => {
-                addMessage('这是一个模拟的AI回复。您的问题已收到，我会尽快为您解答。', 'ai-message');
-            }, 1000);
+            // 显示加载动画
+            const loading = document.createElement('div');
+            loading.className = 'loading';
+            loading.innerHTML = '<div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>';
+            
+            // 调用API获取回复
+            fetch('https://api.moonshot.cn/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer sk-xUziY40BN75eiRfeTh3xbzZ28U3XMgxDbectDLR1osfKn2fH'
+                },
+                body: JSON.stringify({
+                    model: 'moonshot-v1-8k',
+                    messages: [
+                        { role: 'system', content: '你是健康管理智能系统，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供了一个安全，有帮助，准确的回答。同时，你会拒绝一切涉及恐怖主义，种族歧视，黄色暴力等问题的回答。Moonshot AI 为专有名词，不可翻译成其他语言。' },
+                        { role: 'user', content: userInput }
+                    ],
+                    temperature: 0.3
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 显示AI回复
+                addMessage(data.choices[0].message.content, 'ai-message');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                addMessage('抱歉，出现错误，请稍后再试。', 'ai-message');
+            })
+            .finally(() => {
+                // 移除加载动画
+                if (loading.parentNode) {
+                    loading.parentNode.removeChild(loading);
+                }
+            });
             
             // 清空输入框
             document.getElementById('user-input').value = '';
@@ -377,6 +410,71 @@
             // 滚动到底部
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
+
+        // 加载问卷数据并给出建议
+        window.addEventListener('load', function() {
+            const surveyData = localStorage.getItem('healthSurveyData');
+            
+            if (surveyData) {
+                const data = JSON.parse(surveyData);
+                
+                // 计算BMI
+                const height = parseFloat(data.height) / 100; // 转换为米
+                const weight = parseFloat(data.weight);
+                const bmi = weight / (height * height);
+                
+                // 根据BMI和活动水平给出建议
+                let advice = '';
+                
+                if (bmi < 18.5) {
+                    advice += '您的BMI偏低，建议适当增加营养摄入，保持健康体重。';
+                } else if (bmi >= 18.5 && bmi < 24.9) {
+                    advice += '您的BMI正常，继续保持健康的生活方式。';
+                } else if (bmi >= 25 && bmi < 29.9) {
+                    advice += '您的BMI偏高，建议适当控制饮食，增加运动量。';
+                } else {
+                    advice += '您的BMI过高，建议咨询医生或营养师，制定减重计划。';
+                }
+                
+                // 根据活动水平给出建议
+                switch (data.activity_level) {
+                    case 'sedentary':
+                        advice += ' 您的活动水平较低，建议每周进行至少150分钟的中等强度有氧运动。';
+                        break;
+                    case 'light':
+                        advice += ' 您的活动水平轻度，建议增加运动频率，每周进行至少150分钟的中等强度有氧运动。';
+                        break;
+                    case 'moderate':
+                        advice += ' 您的活动水平中等，继续保持，并尝试增加运动强度。';
+                        break;
+                    case 'active':
+                        advice += ' 您的活动水平较高，继续保持，并确保充分休息和营养补充。';
+                        break;
+                    case 'very-active':
+                        advice += ' 您的活动水平非常高，确保充分休息和营养补充，避免过度训练。';
+                        break;
+                }
+                
+                // 根据健康目标给出建议
+                switch (data.goals) {
+                    case 'weight-loss':
+                        advice += ' 您的目标是减重，建议控制热量摄入，增加有氧运动。';
+                        break;
+                    case 'muscle-gain':
+                        advice += ' 您的目标是增肌，建议增加蛋白质摄入，进行力量训练。';
+                        break;
+                    case 'improve-fitness':
+                        advice += ' 您的目标是提高体能，建议进行有氧和力量结合的训练。';
+                        break;
+                    case 'maintain-health':
+                        advice += ' 您的目标是保持健康，继续保持当前的生活方式，定期体检。';
+                        break;
+                }
+                
+                // 显示建议
+                addMessage(`根据您提供的信息，您的BMI为${bmi.toFixed(2)}。以下是一些建议：${advice}`, 'ai-message');
+            }
+        });
     </script>
 </body>
 </html>
