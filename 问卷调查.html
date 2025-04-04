@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健康调查问卷</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            background-image: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .survey-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 30px;
+            z-index: 1;
+        }
+        
+        .survey-header {
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .survey-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #4caf50;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .radio-option input {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .submit-button {
+            margin-top: 10px;
+            padding: 12px;
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .submit-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(76, 175, 80, 0.3);
+        }
+        
+        .thank-you-message {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background-color: #e8f5e9;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .error-message {
+            color: #e53935;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .survey-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="survey-container">
+        <div class="survey-header">
+            <i class="fas fa-heartbeat" style="margin-right: 6px;"></i>
+            健康调查问卷
+        </div>
+        
+        <form class="survey-form" id="health-survey">
+            <div class="form-group">
+                <label for="gender">性别</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="male" name="gender" value="male" required>
+                        <label for="male">男</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="female" name="gender" value="female" required>
+                        <label for="female">女</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="height">身高 (cm)</label>
+                <input type="number" id="height" name="height" min="100" max="250" required placeholder="例如：170">
+                <div class="error-message" id="height-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="weight">体重 (kg)</label>
+                <input type="number" id="weight" name="weight" min="30" max="200" step="0.1" required placeholder="例如：65.5">
+                <div class="error-message" id="weight-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="age">年龄</label>
+                <input type="number" id="age" name="age" min="1" max="120" required placeholder="例如：30">
+                <div class="error-message" id="age-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="activity-level">日常活动水平</label>
+                <select id="activity-level" name="activity_level" required>
+                    <option value="">请选择...</option>
+                    <option value="sedentary">久坐不动（几乎不运动）</option>
+                    <option value="light">轻度活动（每周运动1-2次）</option>
+                    <option value="moderate">中度活动（每周运动3-5次）</option>
+                    <option value="active">活跃（每周运动6-7次）</option>
+                    <option value="very-active">非常活跃（每天高强度运动或体力劳动）</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="health-goals">健康目标</label>
+                <select id="health-goals" name="goals" required>
+                    <option value="">请选择...</option>
+                    <option value="weight-loss">减重</option>
+                    <option value="muscle-gain">增肌</option>
+                    <option value="improve-fitness">提高体能</option>
+                    <option value="maintain-health">保持健康</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="medical-conditions">是否有慢性疾病？</label>
+                <select id="medical-conditions" name="medical_conditions">
+                    <option value="none">无</option>
+                    <option value="hypertension">高血压</option>
+                    <option value="diabetes">糖尿病</option>
+                    <option value="heart-disease">心脏病</option>
+                    <option value="other">其他（请在备注中说明）</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="notes">其他健康相关信息（可选）</label>
+                <textarea id="notes" name="notes" rows="3" placeholder="请在此输入其他健康相关信息..."></textarea>
+            </div>
+            
+            <button type="submit" class="submit-button">
+                <i class="fas fa-paper-plane"></i> 提交问卷
+            </button>
+        </form>
+        
+        <div class="thank-you-message" id="thank-you">
+            <i class="fas fa-check-circle" style="color: #4caf50; font-size: 2rem; margin-bottom: 10px;"></i>
+            <h3>感谢您完成问卷调查！</h3>
+            <p>您的健康数据已保存，您可以在健康顾问对话中获取个性化建议。</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('health-survey').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 表单验证
+            let isValid = true;
+            
+            // 验证身高
+            const height = document.getElementById('height').value;
+            if (height < 100 || height > 250) {
+                document.getElementById('height-error').textContent = '请输入合理的身高范围（100-250cm）';
+                document.getElementById('height-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('height-error').style.display = 'none';
+            }
+            
+            // 验证体重
+            const weight = document.getElementById('weight').value;
+            if (weight < 30 || weight > 200) {
+                document.getElementById('weight-error').textContent = '请输入合理的体重范围（30-200kg）';
+                document.getElementById('weight-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('weight-error').style.display = 'none';
+            }
+            
+            // 验证年龄
+            const age = document.getElementById('age').value;
+            if (age < 1 || age > 120) {
+                document.getElementById('age-error').textContent = '请输入合理的年龄范围（1-120岁）';
+                document.getElementById('age-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('age-error').style.display = 'none';
+            }
+            
+            if (!isValid) return;
+            
+            // 获取表单数据
+            const formData = {
+                gender: document.querySelector('input[name="gender"]:checked').value,
+                height: height,
+                weight: weight,
+                age: age,
+                activity_level: document.getElementById('activity-level').value,
+                goals: document.getElementById('health-goals').value,
+                medical_conditions: document.getElementById('medical-conditions').value,
+                notes: document.getElementById('notes').value
+            };
+            
+            // 将数据保存到本地存储
+            localStorage.setItem('healthSurveyData', JSON.stringify(formData));
+            
+            // 显示感谢信息
+            document.getElementById('health-survey').style.display = 'none';
+            document.getElementById('thank-you').style.display = 'block';
+            
+            // 3秒后跳转到健康安全顾问页面
+            setTimeout(() => {
+                window.location.href = 'https://believe-arch.github.io/-.github.io/%E5%AF%B9%E8%AF%9D%E6%A1%86'; // 健康安全顾问页面URL
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
