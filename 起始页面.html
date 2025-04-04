@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>您的私人健康顾问</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #e8f5e9 0%, #c8e6c9 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            transform: scale(1.05);
+            transform-origin: top left;
+            overflow: auto;
+        }
+        
+        /* 标题样式 */
+        .title {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #000;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-family: 'Arial Black', 'Noto Sans SC', sans-serif;
+        }
+        
+        /* 表格样式 */
+        table {
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto 25px;
+            border-collapse: collapse;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+        
+        /* 表头样式 */
+        thead {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        /* 单元格样式 */
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            font-size: 15px;
+        }
+        
+        /* 鼠标悬停效果 */
+        tr:hover {
+            background-color: rgba(249, 249, 249, 0.85);
+        }
+        
+        /* 确保表头悬停时背景色不消失 */
+        thead tr:hover {
+            background-color: #4CAF50;
+        }
+        
+        /* 链接样式 */
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            padding: 6px 12px;
+            border: 2px solid #4CAF50;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+        
+        a:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        /* 健康建议样式 */
+        .health-tips {
+            color: #444;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        
+        /* 图片样式 */
+        .health-image {
+            max-width: 130px;
+            height: auto;
+            border-radius: 6px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .health-image:hover {
+            transform: scale(1.05);
+        }
+        
+        /* 食物热量值列表样式 */
+        .food-list {
+            max-width: 650px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .food-list h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #4CAF50;
+            font-size: 1.4rem;
+        }
+        
+        .food-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        
+        .food-item:last-child {
+            border-bottom: none;
+        }
+        
+        .food-name {
+            flex: 1;
+            text-align: left;
+            padding-right: 15px;
+        }
+        
+        .food-calories {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            table, .food-list {
+                width: 100%;
+            }
+            
+            th, td, .food-item {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+            
+            .title {
+                font-size: 1.9rem;
+                margin-bottom: 20px;
+            }
+            
+            .health-image {
+                max-width: 110px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            th, td, .food-item {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            
+            a {
+                padding: 4px 8px;
+                font-size: 12px;
+            }
+            
+            .title {
+                font-size: 1.6rem;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1 class="title">您的私人健康顾问</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>健康管理系统</th>
+                <th>输入您的日常饮食</th>
+                <th>您的日常应该如何去做</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <img src="https://images.unsplash.com/photo-1490818387583-1baba5e638af?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1160&q=80" 
+                         alt="健康食物" 
+                         class="health-image">
+                </td>
+                <td>
+                    <a href="https://believe-arch.github.io/-.github.io/%E9%97%AE%E5%8D%B7%E8%B0%83%E6%9F%A5" target="_blank">输入</a>
+                </td>
+                <td class="health-tips">
+                    均衡摄入、多吃蔬果、控制糖分、<br>
+                    限制盐分、适量饮水、选择全谷物、<br>
+                    适量摄入健康脂肪、合理搭配、<br>
+                    定时定量以及享受食物
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div class="food-list">
+        <h2>部分食物的热量值（每100克）</h2>
+        <div class="food-item">
+            <div class="food-name">苹果</div>
+            <div class="food-calories">52 千卡</div>
+        </div>
+        <div class="food-item">
+            <div class="food-name">香蕉</div>
+            <div class="food-calories">89 千卡</div>
+        </div>
+        <div class="food-item">
+            <div class="food-name">鸡胸肉</div>
+            <div class="food-calories">165 千卡</div>
+        </div>
+        <div class="food-item">
+            <div class="food-name">三文鱼</div>
+            <div class="food-calories">208 千卡</div>
+        </div>
+        <div class="food-item">
+            <div class="food-name">全麦面包</div>
+            <div class="food-calories">247 千卡</div>
+        </div>
+        <div class="food-item">
+            <div class="food-name">燕麦片</div>
+            <div class="food-calories">389 千卡</div>
+        </div>
+        <div class="food-item">
+            <div class="food-name">牛奶（脱脂）</div>
+            <div class="food-calories">42 千卡</div>
+        </div>
+        <div class="food-item">
+            <div class="food-name">鸡蛋</div>
+            <div class="food-calories">155 千卡</div>
+        </div>
+    </div>
+</body>
+</html>
