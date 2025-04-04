@@ -226,7 +226,7 @@
         <div class="thank-you-message" id="thank-you">
             <i class="fas fa-check-circle" style="color: #4caf50; font-size: 2rem; margin-bottom: 10px;"></i>
             <h3>感谢您完成问卷调查！</h3>
-            <p>您的健康数据已保存，您可以在健康顾问对话中获取个性化建议。</p>
+            <p>您的健康数据已保存，您可以在健康顾问对话中获取个性化建议。稍等为您即将跳转</p>
         </div>
     </div>
 
@@ -288,10 +288,10 @@
             document.getElementById('health-survey').style.display = 'none';
             document.getElementById('thank-you').style.display = 'block';
             
-            // 3秒后跳转到健康安全顾问页面
+            // 2秒后跳转到健康安全顾问页面
             setTimeout(() => {
                 window.location.href = 'https://believe-arch.github.io/-.github.io/%E5%AF%B9%E8%AF%9D%E6%A1%86'; // 健康安全顾问页面URL
-            }, 3000);
+            }, 2000);
         });
     </script>
 </body>
